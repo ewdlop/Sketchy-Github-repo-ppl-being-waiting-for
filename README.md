@@ -1,7 +1,106 @@
-# Sketchy-Github-repo-ppl-being-waiting-for
+# 👻 Sketchy-Github-repo-ppl-being-waiting-for 🎃
 
-## 🎃 Halloween-Themed SQL Documentation
+> *一個讓人毛骨悚然的技術學習之旅... 大家都在等待的詭異倉庫*
 
-### SQL Guides
-- [🎃 Halloween SQL Queries](./public/🎃.md) - Spooky SQL queries and examples
-- [👻 Phantom Read SQL](./public/phantom-read.md) - Understanding phantom reads in database transactions
+## 🦇 專案願景 (Sketchy Vision)
+
+**歡迎來到黑暗的程式碼墓地** 💀
+
+這不只是一個普通的 GitHub 倉庫... 這是一個**詭異的學習實驗室**，在這裡：
+
+- 📚 **知識在黑暗中發光**：每個教學都帶有萬聖節的詭異氛圍
+- 🎃 **程式碼像南瓜燈一樣被雕刻**：深入骨髓的技術文檔
+- 👻 **幽靈般的互動體驗**：Jupyter notebooks、3D Blender 場景、SQL 魔法
+- 🕷️ **蜘蛛網般連結的知識**：從資料庫到 3D 建模，無所不包
+- 🦇 **在午夜編碼**：為那些喜歡在深夜學習的開發者準備
+
+### 🔮 核心理念
+
+1. **學習不應該無聊** - 用萬聖節主題讓技術變得有趣
+2. **視覺化一切** - 用 emoji、3D 模型、互動筆記本
+3. **詭異但實用** - 看起來嚇人，實際上超級有用
+4. **永遠在成長** - 像鬼屋一樣不斷添加新的房間
+
+---
+
+## 🎃 當前內容
+
+### 📓 互動筆記本
+- [📓 萬聖節特輯](./public/📓.ipynb) - 詭異的 Python 教學與遊戲
+
+### 📖 SQL 魔法書
+- [🎃 Halloween SQL Queries](./public/🎃.md) - 詭異的 SQL 查詢與範例
+- [👻 Phantom Read SQL](./public/👻-read.md) - 理解資料庫事務中的幽靈讀取
+
+### 🎨 3D 場景
+- 🎃 Blender 萬聖節場景生成器（已移除，但精神永存）
+
+---
+
+## 🕸️ 未來的黑暗計畫
+
+- [ ] 🧛‍♂️ 吸血鬼演算法系列
+- [ ] 🧟 殭屍程式碼重構指南
+- [ ] 🏚️ 鬼屋架構模式
+- [ ] 🔮 數據科學占卜術
+- [ ] 🌙 午夜 Debug 指南
+- [ ] 💀 骷髏代碼審查清單
+
+---
+
+## 🎭 為什麼叫 "Sketchy"？
+
+1. **Sketchy** = 詭異的、令人不安的 👻
+2. **Sketchy** = 草圖、概念、創意 ✏️
+3. **Sketchy** = 不循常規、創新的 🎨
+
+這個倉庫就是這三者的結合！
+
+---
+
+## 🌟 適合誰？
+
+- 🎃 喜歡萬聖節的開發者
+- 👻 厭倦無聊技術文檔的學習者
+- 🦇 在深夜寫代碼的夜貓子
+- 💀 想要不一樣學習體驗的人
+- 🕷️ 追求視覺化和互動式學習的極客
+
+---
+
+## 🎪 貢獻指南
+
+想要加入這個詭異的冒險嗎？
+
+1. Fork 這個鬼屋 🏚️
+2. 創建你自己的恐怖分支 🌿
+3. 提交你的詭異 PR 💀
+4. 等待午夜的審查 🌙
+
+**規則：** 必須保持萬聖節主題！🎃
+
+---
+
+## 📜 授權
+
+本專案採用 **"午夜編碼許可證"** (MIT License) 💀
+
+---
+
+<div align="center">
+
+### 🎃 保持詭異，保持編碼 🎃
+
+*"在程式碼的黑暗森林裡，我們用知識點亮南瓜燈"* 🔥
+
+**Star ⭐ 這個倉庫，讓更多人發現這個詭異的學習之地！**
+
+---
+
+👻 **萬聖節快樂！永遠...** 🦇
+
+![Visitors](https://img.shields.io/badge/visitors-👻%20counting-orange)
+![Status](https://img.shields.io/badge/status-haunted-purple)
+![Vibe](https://img.shields.io/badge/vibe-🎃%20spooky-black)
+
+</div>
