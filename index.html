@@ -231,6 +231,46 @@
             <button onclick="showPopup()">SUBMIT TO THE VOID</button>
         </div>
         
+        <div class="sketchy-section">
+            <h2 style="color: #ff00ff;">🔮 Fortune Teller (Totally Accurate) 🔮</h2>
+            <p>Click the crystal ball to reveal your spooky fortune!</p>
+            <div style="text-align: center; font-size: 3em; margin: 20px; cursor: pointer;" onclick="revealFortune()">🔮</div>
+            <p id="fortune" style="color: #ffff00; font-size: 1.2em; text-align: center; min-height: 50px;"></p>
+        </div>
+        
+        <div class="sketchy-section">
+            <h2 style="color: #ff6600;">🎰 Spin the Wheel of Doom 🎰</h2>
+            <p>Test your luck! What could possibly go wrong?</p>
+            <button onclick="spinWheel()" style="font-size: 2em;">🎡 SPIN NOW!</button>
+            <p id="wheel-result" style="color: #00ff00; font-size: 1.5em; text-align: center; min-height: 50px; margin-top: 20px;"></p>
+        </div>
+        
+        <div class="sketchy-section">
+            <h2 style="color: #00ffff;">🧪 Mad Scientist's Lab 🧪</h2>
+            <p>Mix random potions and see what happens!</p>
+            <div style="display: flex; justify-content: center; gap: 20px; margin: 20px 0;">
+                <button onclick="mixPotion('red')" style="background: #ff0000;">🧪 Red Potion</button>
+                <button onclick="mixPotion('green')" style="background: #00ff00;">🧪 Green Potion</button>
+                <button onclick="mixPotion('blue')" style="background: #0000ff;">🧪 Blue Potion</button>
+            </div>
+            <p id="potion-result" style="color: #ff00ff; font-size: 1.2em; text-align: center; min-height: 50px;"></p>
+        </div>
+        
+        <div class="sketchy-section">
+            <h2 style="color: #ff0000;">🎵 Haunted Music Box 🎵</h2>
+            <p>Play cursed melodies (headphones recommended... or not)</p>
+            <button onclick="playHauntedSound()">🎶 Play Spooky Sound</button>
+            <button onclick="stopHauntedSound()">🔇 Make It Stop!</button>
+            <p id="sound-warning" style="color: #ffff00; text-align: center; margin-top: 10px;"></p>
+        </div>
+        
+        <div class="sketchy-section">
+            <h2 style="color: #9900ff;">🌙 Midnight Countdown Challenge 🌙</h2>
+            <p>Can you click the button exactly 13 times before the timer runs out?</p>
+            <button onclick="startChallenge()" id="challenge-btn">START CHALLENGE</button>
+            <p id="challenge-status" style="color: #00ff00; font-size: 1.3em; text-align: center; margin-top: 10px;"></p>
+        </div>
+        
         <marquee behavior="alternate" style="margin: 20px 0;">
             🕸️👻🕷️💀🎃🦇⚰️🕸️👻🕷️💀🎃🦇⚰️🕸️👻🕷️💀🎃🦇⚰️
         </marquee>
@@ -288,6 +328,163 @@
                 ghost.style.left = randomLeft + '%';
             });
         }, 5000);
+        
+        // Fortune Teller
+        const fortunes = [
+            "🔮 You will encounter a mysterious stranger... in your closet!",
+            "🔮 A dark figure watches you... it's your shadow, silly!",
+            "🔮 Great fortune awaits... just kidding, you're cursed!",
+            "🔮 Beware of black cats... and white cats... and all cats!",
+            "🔮 Your computer will be haunted... by too many browser tabs!",
+            "🔮 A spooky surprise awaits at midnight... it's bedtime!",
+            "🔮 The spirits say: Have you tried turning it off and on again?",
+            "🔮 Your future holds... more trick-or-treating!"
+        ];
+        
+        function revealFortune() {
+            const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+            document.getElementById('fortune').textContent = fortune;
+            document.getElementById('fortune').style.animation = 'pulse 0.5s';
+        }
+        
+        // Wheel of Doom
+        const wheelResults = [
+            "🎉 You won absolutely nothing!",
+            "💀 Your soul has been claimed... just kidding!",
+            "🎃 Free pumpkin spice everything forever!",
+            "👻 You've been spooked! Better luck next time!",
+            "🦇 You can now fly... in your dreams!",
+            "🕷️ Eight legs of good luck!",
+            "⚰️ Rest in peace... after one more spin!",
+            "🧟 You're now a zombie... of productivity!"
+        ];
+        
+        function spinWheel() {
+            const btn = event.target;
+            btn.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                btn.style.animation = '';
+                const result = wheelResults[Math.floor(Math.random() * wheelResults.length)];
+                document.getElementById('wheel-result').textContent = result;
+            }, 500);
+        }
+        
+        // Mad Scientist's Lab
+        let potionsMixed = [];
+        
+        function mixPotion(color) {
+            potionsMixed.push(color);
+            const resultElement = document.getElementById('potion-result');
+            
+            if (potionsMixed.length === 1) {
+                resultElement.textContent = `🧪 You added a ${color} potion... add more!`;
+            } else if (potionsMixed.length === 2) {
+                resultElement.textContent = `💥 Bubbling... this could get interesting!`;
+            } else {
+                const outcomes = [
+                    "💥 BOOM! Your potion exploded (harmlessly)!",
+                    "✨ You created a sparkle potion! Everything is glittery now!",
+                    "🌈 Rainbow smoke appears! It smells like... candy?",
+                    "🧊 The mixture froze instantly! Time for ghost popsicles!",
+                    "🔥 It burst into green flames! Spooky but safe!",
+                    "👻 A tiny ghost appeared and flew away! How cute!",
+                    "🤢 It turned into something... questionable. Don't drink it!"
+                ];
+                resultElement.textContent = outcomes[Math.floor(Math.random() * outcomes.length)];
+                potionsMixed = [];
+            }
+        }
+        
+        // Haunted Music Box
+        let audioPlaying = false;
+        let audioContext;
+        let oscillator;
+        
+        function playHauntedSound() {
+            if (audioPlaying) return;
+            
+            document.getElementById('sound-warning').textContent = '🎵 Playing haunted melody... (not really, just pretending!)';
+            audioPlaying = true;
+            
+            // Simulate sound playing
+            setTimeout(() => {
+                document.getElementById('sound-warning').textContent = '👻 The music box is haunted!';
+            }, 2000);
+            
+            setTimeout(() => {
+                audioPlaying = false;
+                document.getElementById('sound-warning').textContent = '';
+            }, 5000);
+        }
+        
+        function stopHauntedSound() {
+            audioPlaying = false;
+            document.getElementById('sound-warning').textContent = '🔇 Silence... for now.';
+            setTimeout(() => {
+                document.getElementById('sound-warning').textContent = '';
+            }, 2000);
+        }
+        
+        // Midnight Challenge
+        let challengeActive = false;
+        let challengeClicks = 0;
+        let challengeTimer;
+        
+        function startChallenge() {
+            if (challengeActive) return;
+            
+            challengeActive = true;
+            challengeClicks = 0;
+            const btn = document.getElementById('challenge-btn');
+            const status = document.getElementById('challenge-status');
+            
+            btn.textContent = 'CLICK ME! (0/13)';
+            status.textContent = '⏰ You have 13 seconds!';
+            
+            let timeLeft = 13;
+            challengeTimer = setInterval(() => {
+                timeLeft--;
+                if (timeLeft <= 0) {
+                    clearInterval(challengeTimer);
+                    if (challengeClicks === 13) {
+                        status.textContent = '🎉 YOU DID IT! You clicked exactly 13 times!';
+                        status.style.color = '#00ff00';
+                    } else {
+                        status.textContent = `👻 TIME'S UP! You clicked ${challengeClicks} times. Try again!`;
+                        status.style.color = '#ff0000';
+                    }
+                    btn.textContent = 'START CHALLENGE';
+                    challengeActive = false;
+                    challengeClicks = 0;
+                } else {
+                    status.textContent = `⏰ ${timeLeft} seconds left!`;
+                }
+            }, 1000);
+            
+            btn.onclick = function() {
+                if (challengeActive) {
+                    challengeClicks++;
+                    btn.textContent = `CLICK ME! (${challengeClicks}/13)`;
+                    if (challengeClicks === 13) {
+                        clearInterval(challengeTimer);
+                        status.textContent = '🎉 PERFECT! You clicked exactly 13 times!';
+                        status.style.color = '#ffff00';
+                        challengeActive = false;
+                        btn.textContent = 'START CHALLENGE';
+                        btn.onclick = startChallenge;
+                    } else if (challengeClicks > 13) {
+                        clearInterval(challengeTimer);
+                        status.textContent = `💀 OOPS! You clicked ${challengeClicks} times. Too many!`;
+                        status.style.color = '#ff0000';
+                        challengeActive = false;
+                        btn.textContent = 'START CHALLENGE';
+                        btn.onclick = startChallenge;
+                    }
+                } else {
+                    startChallenge();
+                }
+            };
+        }
     </script>
 </body>
 </html>
