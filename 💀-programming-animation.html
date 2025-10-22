@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💀 骷髏程式設計動畫 - Skeleton Programming Animation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #ff6b00;
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #ff6b00;
+            text-shadow: 0 0 20px #ff6b00;
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #ff6b00, 0 0 20px #ff6b00; }
+            to { text-shadow: 0 0 20px #ff6b00, 0 0 30px #ff6b00, 0 0 40px #ff0000; }
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #aaa;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff6b00, #ff4500);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .stage-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .stage {
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border: 2px solid #444;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .stage.active {
+            background: linear-gradient(135deg, #ff6b00, #ff4500);
+            border-color: #ff6b00;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.6);
+        }
+
+        .stage:hover {
+            border-color: #ff6b00;
+        }
+
+        .animation-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 968px) {
+            .animation-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .code-panel {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #333;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(90deg, #ff6b00, #ff4500);
+            opacity: 0.8;
+        }
+
+        .panel-title {
+            position: relative;
+            z-index: 1;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-top: 10px;
+        }
+
+        .code-content {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            color: #d4d4d4;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .code-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .code-content::-webkit-scrollbar-track {
+            background: #2d2d2d;
+        }
+
+        .code-content::-webkit-scrollbar-thumb {
+            background: #ff6b00;
+            border-radius: 4px;
+        }
+
+        .skeleton-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .bone {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #666;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bone::before {
+            content: '💀';
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+            opacity: 0.3;
+        }
+
+        .bone.growing {
+            animation: grow 0.5s ease-out;
+        }
+
+        @keyframes grow {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .bone-content {
+            margin-left: 40px;
+        }
+
+        .function-name {
+            color: #569cd6;
+            font-weight: bold;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .keyword {
+            color: #c586c0;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .highlight {
+            animation: highlight 1s ease-in-out;
+        }
+
+        @keyframes highlight {
+            0%, 100% { background: transparent; }
+            50% { background: rgba(255, 107, 0, 0.3); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #2d2d2d;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+            border: 2px solid #444;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b00, #ff4500);
+            transition: width 0.5s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .description {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b00;
+            margin: 20px 0;
+        }
+
+        .description h3 {
+            color: #ff6b00;
+            margin-bottom: 10px;
+        }
+
+        .floating-skull {
+            position: fixed;
+            font-size: 3em;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        .code-line {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-skull" style="top: 10%; left: 5%;">💀</div>
+    <div class="floating-skull" style="top: 70%; right: 10%; animation-delay: 2s;">🦴</div>
+    <div class="floating-skull" style="bottom: 15%; left: 15%; animation-delay: 4s;">💀</div>
+
+    <div class="container">
+        <header>
+            <h1>💀 骷髏程式設計動畫</h1>
+            <p class="subtitle">Skeleton Programming - From Bones to Life</p>
+        </header>
+
+        <div class="controls">
+            <button class="btn" onclick="startAnimation()">▶️ 開始動畫</button>
+            <button class="btn" onclick="resetAnimation()">🔄 重置</button>
+            <button class="btn" onclick="nextStage()">⏭️ 下一階段</button>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress">0%</div>
+        </div>
+
+        <div class="stage-indicator">
+            <div class="stage" data-stage="0" onclick="jumpToStage(0)">
+                <div>💀 骷髏骨架</div>
+                <small>Structure Only</small>
+            </div>
+            <div class="stage" data-stage="1" onclick="jumpToStage(1)">
+                <div>🦴 添加肌肉</div>
+                <small>Basic Logic</small>
+            </div>
+            <div class="stage" data-stage="2" onclick="jumpToStage(2)">
+                <div>🧠 添加大腦</div>
+                <small>Intelligence</small>
+            </div>
+            <div class="stage" data-stage="3" onclick="jumpToStage(3)">
+                <div>✨ 賦予生命</div>
+                <small>Full Features</small>
+            </div>
+        </div>
+
+        <div class="description" id="stageDescription">
+            <h3>🎃 歡迎來到骷髏程式設計動畫</h3>
+            <p>點擊「開始動畫」觀看程式碼從骨架到完整實現的演變過程。</p>
+            <p>這個動畫展示了如何使用骷髏程式設計方法，從簡單的結構定義開始，逐步構建完整的功能。</p>
+        </div>
+
+        <div class="animation-area">
+            <div class="code-panel">
+                <div class="panel-title">📝 程式碼演變</div>
+                <div class="code-content" id="codeDisplay"></div>
+            </div>
+
+            <div class="code-panel">
+                <div class="panel-title">🎨 視覺化骨架</div>
+                <div class="skeleton-visual" id="visualDisplay"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStage = 0;
+        let animationInterval = null;
+        let isAnimating = false;
+
+        const stages = [
+            {
+                name: '💀 骷髏骨架階段',
+                description: '定義基本結構和介面，使用 pass 作為佔位符。這個階段專注於「程式應該做什麼」而不是「如何做」。',
+                progress: 25,
+                code: `<span class="keyword">class</span> <span class="function-name">HalloweenMonster</span>:
+    <span class="comment">"""萬聖節怪物基礎類別 - 骨架階段"""</span>
+    
+    <span class="keyword">def</span> <span class="function-name">__init__</span>(self, name):
+        <span class="comment"># TODO: 初始化怪物</span>
+        <span class="keyword">pass</span>
+    
+    <span class="keyword">def</span> <span class="function-name">roar</span>(self):
+        <span class="comment">"""發出吼叫"""</span>
+        <span class="keyword">pass</span>
+    
+    <span class="keyword">def</span> <span class="function-name">scare</span>(self, target):
+        <span class="comment">"""嚇唬目標"""</span>
+        <span class="keyword">pass</span>
+    
+    <span class="keyword">def</span> <span class="function-name">collect_candy</span>(self):
+        <span class="comment">"""收集糖果"""</span>
+        <span class="keyword">pass</span>`,
+                bones: [
+                    { name: '__init__', desc: '初始化方法', status: 'empty' },
+                    { name: 'roar', desc: '吼叫功能', status: 'empty' },
+                    { name: 'scare', desc: '驚嚇功能', status: 'empty' },
+                    { name: 'collect_candy', desc: '收集糖果', status: 'empty' }
+                ]
+            },
+            {
+                name: '🦴 添加肌肉階段',
+                description: '實現基本邏輯和數據結構。開始填充核心功能，但還沒有複雜的錯誤處理和優化。',
+                progress: 50,
+                code: `<span class="keyword">class</span> <span class="function-name">HalloweenMonster</span>:
+    <span class="comment">"""萬聖節怪物 - 基本邏輯階段"""</span>
+    
+    <span class="keyword">def</span> <span class="function-name">__init__</span>(self, name, monster_type):
+        self.name = name
+        self.monster_type = monster_type
+        self.energy = 100
+        self.candy_bag = []
+    
+    <span class="keyword">def</span> <span class="function-name">roar</span>(self):
+        <span class="comment">"""發出吼叫"""</span>
+        roar_sounds = {
+            <span class="string">'zombie'</span>: <span class="string">'🧟 Braaaaains!'</span>,
+            <span class="string">'vampire'</span>: <span class="string">'🧛 I vant to suck your blood!'</span>,
+            <span class="string">'ghost'</span>: <span class="string">'👻 Booooo!'</span>
+        }
+        <span class="keyword">return</span> roar_sounds.get(self.monster_type, <span class="string">'Grrr!'</span>)
+    
+    <span class="keyword">def</span> <span class="function-name">scare</span>(self, target):
+        <span class="comment">"""嚇唬目標"""</span>
+        self.energy -= 10
+        <span class="keyword">return</span> <span class="string">f'</span>{self.name}<span class="string"> scared </span>{target}<span class="string">!'</span>
+    
+    <span class="keyword">def</span> <span class="function-name">collect_candy</span>(self, candy_type):
+        <span class="comment">"""收集糖果"""</span>
+        self.candy_bag.append(candy_type)
+        <span class="keyword">return</span> len(self.candy_bag)`,
+                bones: [
+                    { name: '__init__', desc: '初始化完成 ✅', status: 'filled' },
+                    { name: 'roar', desc: '基本吼叫邏輯 ✅', status: 'filled' },
+                    { name: 'scare', desc: '驚嚇邏輯 ✅', status: 'filled' },
+                    { name: 'collect_candy', desc: '糖果收集 ✅', status: 'filled' }
+                ]
+            },
+            {
+                name: '🧠 添加大腦階段',
+                description: '加入智能決策、錯誤處理和狀態管理。程式開始變得「聰明」，能夠應對各種情況。',
+                progress: 75,
+                code: `<span class="keyword">class</span> <span class="function-name">HalloweenMonster</span>:
+    <span class="comment">"""萬聖節怪物 - 智能階段"""</span>
+    
+    <span class="keyword">def</span> <span class="function-name">__init__</span>(self, name, monster_type, max_energy=100):
+        self.name = name
+        self.monster_type = monster_type
+        self.energy = max_energy
+        self.max_energy = max_energy
+        self.candy_bag = []
+        self.scare_count = 0
+        self.is_tired = <span class="keyword">False</span>
+    
+    <span class="keyword">def</span> <span class="function-name">roar</span>(self, intensity=<span class="string">'normal'</span>):
+        <span class="comment">"""發出吼叫，支援不同強度"""</span>
+        <span class="keyword">if</span> self.is_tired:
+            <span class="keyword">return</span> <span class="string">'😴 Zzz... too tired'</span>
+        
+        roar_sounds = {
+            <span class="string">'zombie'</span>: {<span class="string">'normal'</span>: <span class="string">'🧟 Brains...'</span>, <span class="string">'loud'</span>: <span class="string">'🧟 BRAAAAAINS!!!'</span>},
+            <span class="string">'vampire'</span>: {<span class="string">'normal'</span>: <span class="string">'🧛 I vant blood'</span>, <span class="string">'loud'</span>: <span class="string">'🧛 YOUR BLOOD IS MINE!'</span>}
+        }
+        sounds = roar_sounds.get(self.monster_type, {<span class="string">'normal'</span>: <span class="string">'Grrr'</span>})
+        self.energy -= 5
+        self._check_energy()
+        <span class="keyword">return</span> sounds.get(intensity, sounds[<span class="string">'normal'</span>])
+    
+    <span class="keyword">def</span> <span class="function-name">scare</span>(self, target, strategy=<span class="string">'surprise'</span>):
+        <span class="comment">"""嚇唬目標，使用不同策略"""</span>
+        <span class="keyword">if</span> self.energy < 20:
+            <span class="keyword">return</span> <span class="string">'⚠️  Not enough energy to scare!'</span>
+        
+        energy_cost = 10 <span class="keyword">if</span> strategy == <span class="string">'surprise'</span> <span class="keyword">else</span> 15
+        self.energy -= energy_cost
+        self.scare_count += 1
+        self._check_energy()
+        
+        <span class="keyword">return</span> <span class="string">f'</span>{self.roar()}<span class="string"> </span>{self.name}<span class="string"> scared </span>{target}<span class="string">!'</span>
+    
+    <span class="keyword">def</span> <span class="function-name">_check_energy</span>(self):
+        <span class="comment">"""檢查能量狀態"""</span>
+        <span class="keyword">if</span> self.energy < 20:
+            self.is_tired = <span class="keyword">True</span>
+        <span class="keyword">if</span> self.energy <= 0:
+            self.energy = 0`,
+                bones: [
+                    { name: '__init__', desc: '完整初始化 🧠', status: 'smart' },
+                    { name: 'roar', desc: '智能吼叫 🧠', status: 'smart' },
+                    { name: 'scare', desc: '策略性驚嚇 🧠', status: 'smart' },
+                    { name: '_check_energy', desc: '能量管理 🧠', status: 'smart' }
+                ]
+            },
+            {
+                name: '✨ 賦予生命階段',
+                description: '完整的功能實現、優化、文檔和測試。程式達到生產就緒狀態，具備完整的特性和健壯性。',
+                progress: 100,
+                code: `<span class="keyword">from</span> typing <span class="keyword">import</span> List, Dict, Optional
+<span class="keyword">import</span> random
+
+<span class="keyword">class</span> <span class="function-name">HalloweenMonster</span>:
+    <span class="comment">"""
+    萬聖節怪物類別 - 完整版本
+    
+    這個類別表示一個萬聖節怪物，具備完整的功能：
+    - 能量管理系統
+    - 多種驚嚇策略
+    - 糖果收集與交易
+    - 狀態追蹤與統計
+    
+    Example:
+        >>> monster = HalloweenMonster("Dracula", "vampire")
+        >>> monster.roar(intensity="loud")
+        '🧛 YOUR BLOOD IS MINE!'
+    """</span>
+    
+    <span class="keyword">def</span> <span class="function-name">__init__</span>(self, name: str, monster_type: str, 
+                 max_energy: int = 100):
+        <span class="comment">"""初始化怪物實例"""</span>
+        self.name = name
+        self.monster_type = monster_type
+        self.energy = max_energy
+        self.max_energy = max_energy
+        self.candy_bag: List[str] = []
+        self.scare_count = 0
+        self.is_tired = <span class="keyword">False</span>
+        self.stats = {<span class="string">'roars'</span>: 0, <span class="string">'scares'</span>: 0, <span class="string">'candy_collected'</span>: 0}
+    
+    <span class="keyword">def</span> <span class="function-name">roar</span>(self, intensity: str = <span class="string">'normal'</span>) -> str:
+        <span class="comment">"""發出吼叫"""</span>
+        <span class="keyword">if</span> self.is_tired:
+            <span class="keyword">return</span> self._tired_message()
+        
+        self.stats[<span class="string">'roars'</span>] += 1
+        self.energy -= 5
+        self._check_energy()
+        <span class="keyword">return</span> self._get_roar_sound(intensity)
+    
+    <span class="keyword">def</span> <span class="function-name">rest</span>(self, duration: int = 30) -> str:
+        <span class="comment">"""休息恢復能量"""</span>
+        recovery = min(duration, self.max_energy - self.energy)
+        self.energy += recovery
+        <span class="keyword">if</span> self.energy > 20:
+            self.is_tired = <span class="keyword">False</span>
+        <span class="keyword">return</span> <span class="string">f'😴 </span>{self.name}<span class="string"> rested and recovered </span>{recovery}<span class="string"> energy!'</span>
+    
+    <span class="keyword">def</span> <span class="function-name">get_stats</span>(self) -> Dict:
+        <span class="comment">"""獲取統計數據"""</span>
+        <span class="keyword">return</span> {
+            **self.stats,
+            <span class="string">'energy'</span>: self.energy,
+            <span class="string">'candy_count'</span>: len(self.candy_bag),
+            <span class="string">'is_tired'</span>: self.is_tired
+        }`,
+                bones: [
+                    { name: '__init__', desc: '完整初始化 + 文檔 ✨', status: 'complete' },
+                    { name: 'roar', desc: '完整吼叫系統 ✨', status: 'complete' },
+                    { name: 'rest', desc: '休息恢復功能 ✨', status: 'complete' },
+                    { name: 'get_stats', desc: '統計系統 ✨', status: 'complete' }
+                ]
+            }
+        ];
+
+        function updateStage(stage) {
+            currentStage = stage;
+            const stageData = stages[stage];
+            
+            // 更新進度條
+            const progress = document.getElementById('progress');
+            progress.style.width = stageData.progress + '%';
+            progress.textContent = stageData.progress + '%';
+            
+            // 更新描述
+            const description = document.getElementById('stageDescription');
+            description.innerHTML = `
+                <h3>${stageData.name}</h3>
+                <p>${stageData.description}</p>
+            `;
+            
+            // 更新階段指示器
+            document.querySelectorAll('.stage').forEach((el, idx) => {
+                el.classList.toggle('active', idx === stage);
+            });
+            
+            // 更新程式碼顯示
+            updateCodeDisplay(stageData.code);
+            
+            // 更新視覺化骨架
+            updateVisualDisplay(stageData.bones);
+        }
+
+        function updateCodeDisplay(code) {
+            const codeDisplay = document.getElementById('codeDisplay');
+            codeDisplay.innerHTML = '';
+            
+            const lines = code.split('\n');
+            lines.forEach((line, index) => {
+                const lineDiv = document.createElement('div');
+                lineDiv.className = 'code-line';
+                lineDiv.style.animationDelay = (index * 0.05) + 's';
+                lineDiv.innerHTML = line || '&nbsp;';
+                codeDisplay.appendChild(lineDiv);
+            });
+        }
+
+        function updateVisualDisplay(bones) {
+            const visualDisplay = document.getElementById('visualDisplay');
+            visualDisplay.innerHTML = '';
+            
+            bones.forEach((bone, index) => {
+                setTimeout(() => {
+                    const boneDiv = document.createElement('div');
+                    boneDiv.className = 'bone growing';
+                    
+                    let statusColor = '#666';
+                    let statusIcon = '⚪';
+                    
+                    if (bone.status === 'filled') {
+                        statusColor = '#ffa500';
+                        statusIcon = '🦴';
+                    } else if (bone.status === 'smart') {
+                        statusColor = '#00bfff';
+                        statusIcon = '🧠';
+                    } else if (bone.status === 'complete') {
+                        statusColor = '#00ff00';
+                        statusIcon = '✨';
+                    }
+                    
+                    boneDiv.style.borderColor = statusColor;
+                    
+                    boneDiv.innerHTML = `
+                        <div class="bone-content">
+                            <div style="font-size: 1.2em; margin-bottom: 5px;">
+                                ${statusIcon} <span class="function-name">${bone.name}()</span>
+                            </div>
+                            <div style="color: #aaa; font-size: 0.9em;">${bone.desc}</div>
+                        </div>
+                    `;
+                    
+                    visualDisplay.appendChild(boneDiv);
+                }, index * 150);
+            });
+        }
+
+        function startAnimation() {
+            if (isAnimating) return;
+            
+            isAnimating = true;
+            currentStage = 0;
+            
+            animationInterval = setInterval(() => {
+                updateStage(currentStage);
+                currentStage++;
+                
+                if (currentStage >= stages.length) {
+                    clearInterval(animationInterval);
+                    isAnimating = false;
+                    currentStage = stages.length - 1;
+                }
+            }, 3000);
+        }
+
+        function resetAnimation() {
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
+            isAnimating = false;
+            currentStage = 0;
+            updateStage(0);
+        }
+
+        function nextStage() {
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+                isAnimating = false;
+            }
+            
+            currentStage = Math.min(currentStage + 1, stages.length - 1);
+            updateStage(currentStage);
+        }
+
+        function jumpToStage(stage) {
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+                isAnimating = false;
+            }
+            
+            currentStage = stage;
+            updateStage(stage);
+        }
+
+        // 初始化
+        updateStage(0);
+    </script>
+</body>
+</html>
+
